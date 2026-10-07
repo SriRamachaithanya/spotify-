@@ -3,10 +3,16 @@
   "version": "1.0.0",
   "description": "Modern Spotify Clone Web Player with streaming audio backend",
   "scripts": {
+    "build": "echo 'Static assets ready'",
     "start": "node server.js",
     "dev": "node server.js"
   },
-  "keywords": ["spotify", "music-player", "audio-streaming", "html5-audio"],
+  "keywords": [
+    "spotify",
+    "music-player",
+    "audio-streaming",
+    "html5-audio"
+  ],
   "author": "",
   "license": "ISC"
 }

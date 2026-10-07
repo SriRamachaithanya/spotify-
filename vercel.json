@@ -1,7 +1,24 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/api/songs", "destination": "/api/songs.js" },
-    { "source": "/api/health", "destination": "/api/health.js" }
+  "version": 2,
+  "routes": [
+    { "src": "/api/songs", "dest": "/api/songs.js" },
+    { "src": "/api/health", "dest": "/api/health.js" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/songs/(.*)",
+      "headers": [
+        { "key": "Accept-Ranges", "value": "bytes" },
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
   ]
 }
