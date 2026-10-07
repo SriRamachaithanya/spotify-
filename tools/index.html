@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Spotify Web Player - Modern, high performance copyright-free music streaming experience.">
+    <title>Spotify - Web Player: Music for everyone</title>
+
+    <!-- Critical Inline Styles to prevent unstyled flash -->
+    <style>
+        html,
+        body {
+            background-color: #000000 !important;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- App Stylesheet with cache buster -->
+    <link rel="stylesheet" href="style.css?v=3.0">
+</head>
+
+<body>
+    <!-- Hidden DOM Audio Element for cross-browser playback reliability -->
+    <audio id="mainAudio" preload="metadata"></audio>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-top">
+                <div class="brand-logo" id="brandLogo">
+                    <i class="fa-brands fa-spotify"></i>
+                    <span>Spotify</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-item active" id="navHome">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="nav-item" id="navSearch">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Search</span>
+                    </a>
+                    <a href="#" class="nav-item" id="navLibrary">
+                        <i class="fa-solid fa-lines-leaning"></i>
+                        <span>Your Library</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-library">
+                <div class="library-header">
+                    <span class="lib-title"><i class="fa-solid fa-book-bookmark"></i> Playlists</span>
+                    <button class="icon-btn-ghost" id="createPlaylistBtn" title="Create Playlist"><i
+                            class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="playlist-cards">
+                    <div class="playlist-item active" data-filter="all">
+                        <div class="playlist-icon"><i class="fa-solid fa-music"></i></div>
+                        <div class="playlist-meta">
+                            <span class="p-title">NCS Best Hits</span>
+                            <span class="p-subtitle" id="ncsCountLabel">10 songs</span>
+                        </div>
+                    </div>
+                    <div class="playlist-item" data-filter="favorites" id="likedSongsFilter">
+                        <div class="playlist-icon liked"><i class="fa-solid fa-heart"></i></div>
+                        <div class="playlist-meta">
+                            <span class="p-title">Liked Songs</span>
+                            <span class="p-subtitle" id="likedCount">0 songs</span>
+                        </div>
+                    </div>
+                    <div class="playlist-item" data-filter="electronic">
+                        <div class="playlist-icon electronic"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="playlist-meta">
+                            <span class="p-title">Electronic Pulse</span>
+                            <span class="p-subtitle">Curated Beats</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="install-app">
+                    <i class="fa-solid fa-circle-down"></i>
+                    <span id="backendStatus">Backend Connected</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="mainContent">
+            <!-- Sticky Header -->
+            <header class="top-header" id="topHeader">
+                <div class="nav-controls">
+                    <button class="circle-btn" id="historyBackBtn" title="Back"><i
+                            class="fa-solid fa-chevron-left"></i></button>
+                    <button class="circle-btn" id="historyForwardBtn" title="Forward"><i
+                            class="fa-solid fa-chevron-right"></i></button>
+                    <div class="search-bar-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="What do you want to play?" autocomplete="off">
+                        <button class="clear-search-btn" id="clearSearchBtn" title="Clear Search"
+                            style="display: none;">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="header-user-actions">
+                    <button class="btn-badge" id="shuffleAllBtn"><i class="fa-solid fa-shuffle"></i> Shuffle
+                        Play</button>
+                    <div class="user-avatar" title="Spotify Profile">
+                        <img src="logo.png" alt="Profile">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="hero-section" id="heroSection">
+                <div class="hero-content">
+                    <div class="hero-cover">
+                        <img src="covers/1.jpg" alt="Featured Album Cover" id="heroCoverImg">
+                        <div class="hero-play-badge" id="heroPlayBtn" title="Play All">
+                            <i class="fa-solid fa-play" id="heroPlayIcon"></i>
+                        </div>
+                    </div>
+                    <div class="hero-details">
+                        <span class="badge-tag">VERIFIED PLAYLIST</span>
+                        <h1 class="hero-title" id="playlistHeading">Best of NCS - No Copyright Sounds</h1>
+                        <p class="hero-description">The ultimate copyright-free music collection. High-energy
+                            electronic, melodic beats, and house tracks for creators and music lovers.</p>
+                        <div class="hero-meta">
+                            <span class="meta-author"><i class="fa-brands fa-spotify"></i> Spotify Clone</span>
+                            <span class="meta-dot">•</span>
+                            <span class="meta-stats" id="totalTracksLabel">10 songs</span>
+                            <span class="meta-dot">•</span>
+                            <span class="meta-time">Approx. 35 min</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Play Cards Grid -->
+            <section class="quick-grid-section">
+                <div class="quick-grid" id="quickGrid">
+                    <!-- Dynamic Quick Cards Injected by JS -->
+                </div>
+            </section>
+
+            <!-- Song List Table -->
+            <section class="tracklist-section">
+                <div class="section-toolbar">
+                    <div class="filter-pills">
+                        <button class="pill-btn active" data-genre="all">All Tracks</button>
+                        <button class="pill-btn" data-genre="ncs">NCS Releases</button>
+                        <button class="pill-btn" data-genre="electronic">Electronic</button>
+                        <button class="pill-btn" data-genre="favorites">Liked Only</button>
+                    </div>
+                    <div class="search-counter" id="searchCounter">Showing 10 songs</div>
+                </div>
+
+                <div class="tracklist-table">
+                    <div class="table-header">
+                        <div class="th-col th-index">#</div>
+                        <div class="th-col th-title">Title</div>
+                        <div class="th-col th-album">Album / Tag</div>
+                        <div class="th-col th-actions"><i class="fa-regular fa-clock"></i></div>
+                    </div>
+
+                    <div class="track-rows" id="trackRowsContainer">
+                        <!-- Dynamic Song Rows Injected by JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bottom Persistent Audio Player -->
+    <footer class="player-bar" id="playerBar">
+        <!-- Left: Current Playing Info -->
+        <div class="player-left">
+            <div class="player-thumb-container">
+                <img src="covers/1.jpg" alt="Track Art" class="player-thumb" id="playerThumb">
+                <div class="player-wave" id="playerWave">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="player-track-meta">
+                <div class="track-name-wrap">
+                    <span class="track-name" id="playerSongName">Warriyo - Mortals</span>
+                </div>
+                <span class="track-artist" id="playerArtistName">Laura Brehm [NCS Release]</span>
+            </div>
+            <button class="btn-like" id="playerHeartBtn" title="Save to Liked Songs">
+                <i class="fa-regular fa-heart"></i>
+            </button>
+        </div>
+
+        <!-- Center: Master Playback Controls & Progress Bar -->
+        <div class="player-center">
+            <div class="playback-controls">
+                <button class="ctrl-btn secondary" id="shuffleBtn" title="Enable Shuffle">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
+                <button class="ctrl-btn" id="prevBtn" title="Previous (P)">
+                    <i class="fa-solid fa-backward-step"></i>
+                </button>
+                <button class="ctrl-btn master-play" id="masterPlay" title="Play/Pause (Space)">
+                    <i class="fa-solid fa-play" id="masterPlayIcon"></i>
+                </button>
+                <button class="ctrl-btn" id="nextBtn" title="Next (N)">
+                    <i class="fa-solid fa-forward-step"></i>
+                </button>
+                <button class="ctrl-btn secondary" id="repeatBtn" title="Enable Repeat">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <span class="time-stamp" id="currentTimeLabel">0:00</span>
+                <div class="slider-wrapper">
+                    <input type="range" name="seek" id="myProgressBar" min="0" max="100" value="0" step="0.1">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="time-stamp" id="totalDurationLabel">0:00</span>
+            </div>
+        </div>
+
+        <!-- Right: Volume & Utilities -->
+        <div class="player-right">
+            <button class="ctrl-btn secondary" id="queueBtn" title="Current Playlist">
+                <i class="fa-solid fa-list-ul"></i>
+            </button>
+            <div class="volume-control">
+                <button class="volume-btn" id="volumeBtn" title="Mute/Unmute (M)">
+                    <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+                </button>
+                <div class="slider-wrapper volume-slider-wrapper">
+                    <input type="range" name="volume" id="volumeSlider" min="0" max="100" value="80" step="1">
+                    <div class="progress-fill" id="volumeFill" style="width: 80%;"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js?v=3.0"></script>
+</body>
+
+</html>
